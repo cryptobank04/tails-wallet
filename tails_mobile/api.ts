@@ -21,8 +21,8 @@ export const getPlaidLinkToken = async (userId: string) => {
 	return linkTokenData
 }
 
-export const createFlowAccount = async (dispatch?: Dispatch) => {
-	const resp = await fetch(`${baseUrl}/createAccount`)
+export const createFlowAccount = async (flownsName: string, dispatch?: Dispatch) => {
+	const resp = await fetch(`${baseUrl}/createAccount?flownsName=${flownsName}`)
 	const flowAccount = await resp.json()
 
 	if (dispatch)
@@ -44,5 +44,17 @@ export const createTailsAccount = async (dispatch?: Dispatch) => {
 
 
 	return firebaseUser
+}
+
+// NOTE: In production we would not pass the private key to the backend
+// we would either:
+// 1. Sign the transaction completely on the client
+// 2. Create a custodial solution where the pks, are stored and managed
+// by the backend using some sort of private key management service provider
+export const depositIntoPool = async (amount: string, address: string, pk: string) => {
+	const resp = await fetch(`${baseUrl}/depositIntoPool?depositAmount=${amount}&address=${address}&pk=${pk}`)
+	const respJson = await resp.json()
+
+	console.log('response', respJson)
 }
 

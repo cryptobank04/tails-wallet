@@ -35,9 +35,9 @@ export const test = functions.https.onRequest(async (_, res) => {
 
 // The Gas fees for these transactions are paid by the Admin, so the user has
 // a smoother onboarding experience.
-export const createAccount = functions.https.onRequest(async (_, response) => {
+export const createAccount = functions.https.onRequest(async (req, response) => {
 	functions.logger.info("Hello logs!", { structuredData: true });
-
+	const flownsName = req.query.flownsName as string
 
 
 	// Hacky way of creating a wallet for testnet using Flow CLI. I could not find
@@ -60,7 +60,7 @@ export const createAccount = functions.https.onRequest(async (_, response) => {
 		const address = await createAccount2(publicKey)
 
 		await createUSDCVault(address, privateKey),
-			await registerDomain('somenamesss2222', address, privateKey)
+			await registerDomain(flownsName, address, privateKey)
 
 
 
@@ -71,7 +71,8 @@ export const createAccount = functions.https.onRequest(async (_, response) => {
 		response.send({
 			privateKey,
 			publicKey,
-			address
+			address,
+			flownsName
 		});
 	})
 
