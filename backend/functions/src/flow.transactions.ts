@@ -145,6 +145,7 @@ export const registerDomain = async (name: string,) => {
 		payer: adminSigner,
 		proposer: adminSigner,
 		authorizations: [adminSigner],
+		limit: 9999,
 		// @ts-ignore
 		args: (arg, t) => [arg(1, t.UInt64), arg(name, t.String), arg("31536000.00", t.UFix64), arg("6.0", t.UFix64), arg("0x3c09a556ecca42dc", t.Address)],
 	})
@@ -186,14 +187,16 @@ transaction(amountDeposit: UFix64, supplierAddress: Address) {
     }
 }`
 
-export const depositIntoUSDC = async (amount: string, supplierAddress: string) => {
+export const depositIntoUSDC = async (amount: string, supplierAddress: string, pk: string) => {
 	const adminSigner = await new FlowService().authorizeMinter()
+	const userSigner = await new FlowService().signer(supplierAddress, pk)
 
 	const transactionId = await fcl.mutate({
 		cadence: lendingPoolDepositTx,
 		payer: adminSigner,
-		proposer: adminSigner,
+		proposer: userSigner,
 		authorizations: [adminSigner],
+		limit: 9999,
 		// @ts-ignore
 		args: (arg, t) => [arg(amount, t.UFix64), arg(supplierAddress, t.Address)]
 	})
@@ -201,6 +204,59 @@ export const depositIntoUSDC = async (amount: string, supplierAddress: string) =
 	const transaction = await fcl.tx(transactionId).onceSealed()
 
 	console.log('Transaction', transaction)
+
+	return transaction
+}
+
+
+const transferUSDCtx = `
+import FiatToken from 0xFiatToken
+import FungibleToken from 0xFungibleToken
+
+transaction(amount: UFix64, to: Address) {
+
+    // The Vault resource that holds the tokens that are being transferred
+    let sentVault: @FungibleToken.Vault
+
+    prepare(signer: AuthAccount) {
+
+        // Get a reference to the signer's stored vault
+        let vaultRef = signer.borrow<&FiatToken.Vault>(from: FiatToken.VaultStoragePath)
+            ?? panic("Could not borrow reference to the owner's Vault!")
+
+        // Withdraw tokens from the signer's stored vault
+        self.sentVault <- vaultRef.withdraw(amount: amount)
+    }
+
+    execute {
+
+        // Get the recipient's public account object
+        let recipient = getAccount(to)
+
+        // Get a reference to the recipient's Receiver
+        let receiverRef = recipient.getCapability(FiatToken.VaultReceiverPubPath)
+            .borrow<&{FungibleToken.Receiver}>()
+            ?? panic("Could not borrow receiver reference to the recipient's Vault")
+
+        // Deposit the withdrawn tokens in the recipient's receiver
+        receiverRef.deposit(from: <-self.sentVault)
+    }
+}`
+
+export const transferUSDC = async (amount: string, address: string, pk: string) => {
+	const adminSigner = await new FlowService().authorizeMinter()
+
+	const transactionId = await fcl.mutate({
+		cadence: transferUSDCtx,
+		payer: adminSigner,
+		proposer: adminSigner,
+		authorizations: [adminSigner],
+		limit: 9999,
+		// @ts-ignore
+		args: (arg, t) => [arg(amount, t.UFix64), arg(address, t.Address)]
+	})
+
+	const transaction = await fcl.tx(transactionId).onceSealed()
 
 	return transaction
 }
@@ -284,19 +340,22 @@ transaction() {
 }
 `
 
-export const approveUSDC = async () => {
+export const approveUSDC = async (address: string, pk: string) => {
 	const adminSigner = await new FlowService().authorizeMinter()
+	const userSigner = await new FlowService().signer(address, pk)
 
 	// @ts-ignore
 	const transactionId = await fcl.mutate({
 		cadence: setupUSDC,
 		payer: adminSigner,
-		proposer: adminSigner,
-		authorizations: [adminSigner],
+		proposer: userSigner,
+		authorizations: [userSigner],
 	})
 
 	const transaction = await fcl.tx(transactionId).onceSealed()
 
-	console.log('Transaction', transaction)
-
+	console.log('Approval Transaction', transaction)
 }
+
+
+

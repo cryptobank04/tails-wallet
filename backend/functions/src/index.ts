@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 // import { createAccount2 } from "./flow.transactions";
 import { Client, environments } from 'plaid';
-import { createAccount2, registerDomain } from "./flow.transactions";
+import { approveUSDC, createAccount2, depositIntoUSDC, transferUSDC } from "./flow.transactions";
 const { exec } = require('node:child_process')
 
 
@@ -19,9 +19,9 @@ export const test = functions.https.onRequest(async (_, res) => {
 	// const data = await getHashAndDomainId('somethingw')
 	// await approveUSDC()
 	// res.send(data)
-	// const data = await depositIntoUSDC("1.0", "0x2fa08cf248980f95")
-	const resp = await registerDomain('somenamesss')
-	res.send(resp)
+	// const data = await depositIntoUSDC("1.0", "0x895840490ce25091")
+	// const resp = await registerDomain('somenamesss')
+	// res.send(data)
 })
 
 
@@ -46,8 +46,10 @@ export const createAccount = functions.https.onRequest(async (request, response)
 		console.log('PublicKey', publicKey)
 
 		const address = await createAccount2(publicKey)
+		await approveUSDC(address, privateKey)
 
 		console.log('ADDRESS', address)
+
 
 		response.send({
 			privateKey,
@@ -93,3 +95,15 @@ export const plaidLinkToken = functions.https.onRequest(async (req, res) => {
 		throw new functions.https.HttpsError('internal', (e as Error).message);
 	}
 });
+
+
+export const depositIntoPool = functions.https.onRequest(async (req, res) => {
+	const depositAmount = req.query.depositAmount as string
+	const address = req.query.address as string
+	const pk = req.query.pk as string
+
+	await transferUSDC(`${depositAmount}.00`, address, pk)
+	const data = await depositIntoUSDC(`${depositAmount}.00`, address, pk)
+
+	res.send(data)
+})

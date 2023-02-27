@@ -23,6 +23,7 @@ fcl.config()
 	.put("0xLendingPool", "0x97d2f3b55c6a6a75")
 	.put("0xSwapRouter", "0xa6850776a94e6551")
 	.put("0xSwapError", "0xa6850776a94e6551")
+	.put("fcl.limit", 9999)
 
 
 // WARNING: For hackathon purposes we've simply pasted the Admin 
@@ -59,6 +60,29 @@ class FlowService {
 			};
 		};
 	};
+
+	signer = (address: string, pk: string) => {
+		return async (account = {}) => {
+			const user = await this.getAccount(address);
+			const key = user.keys[0]
+
+			const sign = this.signWithKey;
+
+			return {
+				...account,
+				tempId: `${user.address}-${key.index}`,
+				addr: fcl.sansPrefix(user.address),
+				keyId: Number(key.index),
+				signingFunction: (signable: any) => {
+					return {
+						addr: fcl.withPrefix(user.address),
+						keyId: Number(key.index),
+						signature: sign(pk, signable.message),
+					};
+				},
+			};
+		}
+	}
 
 	getAccount = async (addr: string) => {
 		const { account } = await fcl.send([fcl.getAccount(addr)]);
