@@ -114,7 +114,7 @@ import NonFungibleToken from 0xNonFungibleToken
 transaction(domainId: UInt64, name: String, duration: UFix64, amount: UFix64, refer: Address) {
   let collectionCap: Capability<&{NonFungibleToken.Receiver}>
   let vault: @FungibleToken.Vault
-  prepare(account: AuthAccount) {
+  prepare(account: AuthAccount, account2: AuthAccount) {
     
     if account.getCapability<&{NonFungibleToken.Receiver}>(Domains.CollectionPublicPath).check() == false {
       if account.borrow<&Domains.Collection>(from: Domains.CollectionStoragePath) !=nil {
@@ -126,7 +126,7 @@ transaction(domainId: UInt64, name: String, duration: UFix64, amount: UFix64, re
       }
     }
     self.collectionCap = account.getCapability<&{NonFungibleToken.Receiver}>(Domains.CollectionPublicPath)
-    let vaultRef = account.borrow<&FungibleToken.Vault>(from: /storage/flowTokenVault)
+    let vaultRef = account2.borrow<&FungibleToken.Vault>(from: /storage/flowTokenVault)
           ?? panic("Could not borrow owner's Vault reference")
     self.vault <- vaultRef.withdraw(amount: amount)
   }
@@ -137,14 +137,15 @@ transaction(domainId: UInt64, name: String, duration: UFix64, amount: UFix64, re
 }
 `
 
-export const registerDomain = async (name: string,) => {
+export const registerDomain = async (name: string, address: string, pk: string) => {
 	const adminSigner = await new FlowService().authorizeMinter()
+	const userSigner = await new FlowService().signer(address, pk)
 
 	const transactionId = await fcl.mutate({
 		cadence: registerDomaintx,
 		payer: adminSigner,
-		proposer: adminSigner,
-		authorizations: [adminSigner],
+		proposer: userSigner,
+		authorizations: [userSigner, adminSigner],
 		limit: 9999,
 		// @ts-ignore
 		args: (arg, t) => [arg(1, t.UInt64), arg(name, t.String), arg("31536000.00", t.UFix64), arg("6.0", t.UFix64), arg("0x3c09a556ecca42dc", t.Address)],

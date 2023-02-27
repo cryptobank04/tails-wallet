@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 // import { createAccount2 } from "./flow.transactions";
 import { Client, environments } from 'plaid';
-import { approveUSDC, createAccount2, depositIntoUSDC, getPoolBalance, transferUSDC } from "./flow.transactions";
+import { approveUSDC, createAccount2, depositIntoUSDC, registerDomain, transferUSDC } from "./flow.transactions";
 const { exec } = require('node:child_process')
 
 
@@ -20,9 +20,10 @@ export const test = functions.https.onRequest(async (_, res) => {
 	// await approveUSDC()
 	// res.send(data)
 	// const data = await depositIntoUSDC("1.0", "0x895840490ce25091")
-	// const resp = await registerDomain('somenamesss')
+	// const resp = await registerDomain('somenamesss2222', )
+	// console.log('Resp', resp)
 	// res.send(data)
-	await getPoolBalance("0x05644a149e8ac162")
+	// await getPoolBalance("0x05644a149e8ac162")
 })
 
 
@@ -47,7 +48,12 @@ export const createAccount = functions.https.onRequest(async (request, response)
 		console.log('PublicKey', publicKey)
 
 		const address = await createAccount2(publicKey)
-		await approveUSDC(address, privateKey)
+
+		await approveUSDC(address, privateKey),
+			await registerDomain('somenamesss2222', address, privateKey)
+
+
+
 
 		console.log('ADDRESS', address)
 
