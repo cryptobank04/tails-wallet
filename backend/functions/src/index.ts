@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 // import { createAccount2 } from "./flow.transactions";
 import { Client, environments } from 'plaid';
-import { approveUSDC, createAccount2, depositIntoUSDC, registerDomain, transferUSDC } from "./flow.transactions";
+import { createAccount2, createUSDCVault, depositIntoUSDC, getFlownsDomain, getPoolBalance, registerDomain, transferUSDC } from "./flow.transactions";
 const { exec } = require('node:child_process')
 
 
@@ -27,15 +27,25 @@ export const test = functions.https.onRequest(async (_, res) => {
 })
 
 
-// // Start writing functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-export const createAccount = functions.https.onRequest(async (request, response) => {
+// createAccount - creates an account for the user.
+// The account creation process involves 3 steps:
+// 1. Generate private/public key pair + address for the user wallet
+// 2. Create USDC vault for the new account/user
+// 3. Register a Flowns Domain for the user
+
+// The Gas fees for these transactions are paid by the Admin, so the user has
+// a smoother onboarding experience.
+export const createAccount = functions.https.onRequest(async (_, response) => {
 	functions.logger.info("Hello logs!", { structuredData: true });
 
 
 
-
+	// Hacky way of creating a wallet for testnet using Flow CLI. I could not find
+	// an easy way to generate a wallet in node/JS using your api. I recommend creating
+	// a simple method (or showing an example) in JS that allows for wallet creation. JS
+	// is a really popular language, so it was a bit disappointing there didnt seem to be 
+	// support for this in your api/sdk. If there was, I was unable to find documentation 
+	// on easily doing this.
 	exec('flow keys generate', async (err: any, output: any) => {
 		console.log('ERR', err)
 		let nospaces = String(output).replace(/\s/g, '').replace(uneededOutputString, '')
@@ -49,7 +59,7 @@ export const createAccount = functions.https.onRequest(async (request, response)
 
 		const address = await createAccount2(publicKey)
 
-		await approveUSDC(address, privateKey),
+		await createUSDCVault(address, privateKey),
 			await registerDomain('somenamesss2222', address, privateKey)
 
 
@@ -70,6 +80,9 @@ export const createAccount = functions.https.onRequest(async (request, response)
 
 });
 
+
+// plaidLinkToken - generates the plaid linktoken required to link a users 
+// bank account to the app
 
 export const plaidLinkToken = functions.https.onRequest(async (req, res) => {
 	const id = req.query.id as string
@@ -103,7 +116,10 @@ export const plaidLinkToken = functions.https.onRequest(async (req, res) => {
 	}
 });
 
-
+// depositIntoPool - allows user to deposit funds into a pool. Since we are 
+// moving funds from a bank account to a wallet, we needed to simulat this process
+// using our Admin wallet to USDC tokens. In a production application the Admin wallet
+// would be replaced by an onramp partner such as Wyre, or Moonpay.
 export const depositIntoPool = functions.https.onRequest(async (req, res) => {
 	const depositAmount = req.query.depositAmount as string
 	const address = req.query.address as string
@@ -113,4 +129,19 @@ export const depositIntoPool = functions.https.onRequest(async (req, res) => {
 	const data = await depositIntoUSDC(`${depositAmount}.00`, address, pk)
 
 	res.send(data)
+})
+
+// getAccount - simply queries user's flow account along with Flowns domain
+export const getAccount = functions.https.onRequest(async (req, res) => {
+	const address = req.query.address as string
+	// 1. get domain name
+	const flownsName = await getFlownsDomain(address)
+
+	// 2. get poolBalance
+	const poolBalance = await getPoolBalance(address)
+
+	res.send({
+		poolBalance,
+		flownsName
+	})
 })

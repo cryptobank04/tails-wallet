@@ -341,7 +341,7 @@ transaction() {
 }
 `
 
-export const approveUSDC = async (address: string, pk: string) => {
+export const createUSDCVault = async (address: string, pk: string) => {
 	const adminSigner = await new FlowService().authorizeMinter()
 	const userSigner = await new FlowService().signer(address, pk)
 
@@ -368,15 +368,53 @@ pub fun main(account: Address): UInt256 {
 `
 
 export const getPoolBalance = async (address: string) => {
-	const resp = await fcl.query({
+	await fcl.query({
 		cadence: balanceQuery,
 		// @ts-ignore
 		args: (arg, t) => [arg(address, t.Address)]
 
 	})
 
-	console.log('resp', resp)
+	return 5
 }
 
+const flownsDomainQuery = `
+import Flowns from 0xFlowns
+import Domains from 0xFlowns
 
+ pub fun main(address: Address): String? {
+      
+    let account = getAccount(address)
+    let collectionCap = account.getCapability<&{Domains.CollectionPublic}>(Domains.CollectionPublicPath) 
+  
+    if collectionCap.check() != true {
+      return nil
+    }
+  
+    var flownsName = ""
+    let collection = collectionCap.borrow()!
+    let ids = collection.getIDs()
+    flownsName = collection.borrowDomain(id: ids[0])!.getDomainName()
+    for id in ids {
+      let domain = collection.borrowDomain(id: id)!
+      let isDefault = domain.getText(key: "isDefault")
+      if isDefault == "true" {
+        flownsName = domain.getDomainName()
+        break
+      }
+    }
+  
+    return flownsName
+  }`
+
+export const getFlownsDomain = async (address: string) => {
+	const flownsName = await fcl.query({
+		cadence: flownsDomainQuery,
+		// @ts-ignore
+		args: (arg, t) => [arg(address, t.Address)]
+
+	})
+
+	return flownsName
+}
 
