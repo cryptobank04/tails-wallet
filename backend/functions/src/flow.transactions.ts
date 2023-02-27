@@ -357,5 +357,25 @@ export const approveUSDC = async (address: string, pk: string) => {
 	console.log('Approval Transaction', transaction)
 }
 
+const balanceQuery = `
+import LendingPool from 0xLendingPool
+
+pub fun main(account: Address): UInt256 {
+	let value = LendingPool.getAccountLpTokenBalanceScaled(account)
+	return value
+}
+`
+
+export const getPoolBalance = async (address: string) => {
+	const resp = await fcl.query({
+		cadence: balanceQuery,
+		// @ts-ignore
+		args: (arg, t) => [arg(address, t.Address)]
+
+	})
+
+	console.log('resp', resp)
+}
+
 
 
