@@ -1,26 +1,38 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
-import { useUser } from '../hooks'
+import { Image, StyleSheet, Text, View } from 'react-native'
+import { useFlowAccount, useUser } from '../hooks'
 
 const ProfileAvatar = () => {
 	const user = useUser()
+	const flowAccount = useFlowAccount()
 
 	if (!user) return null
 
 	return (
 		<View style={styles.container}>
-			<Image resizeMode='contain' source={{ uri: user.additionalUserInfo.profile.picture }} style={styles.image} />
+			<Text style={styles.text}>{flowAccount.flownsName}</Text>
+
+			<View style={styles.avatarcontainer}>
+				<Image resizeMode='contain' source={{ uri: user.additionalUserInfo.profile.picture }} style={styles.image} />
+			</View>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	text: {
+		fontSize: 15,
+		marginRight: 6,
+		fontWeight: '400'
+	},
+	avatarcontainer: {
 		width: 30,
 		height: 30,
 		borderRadius: 60,
-		borderWidth: 1,
-		borderColor: 'purple',
 		marginRight: 20
 	},
 	image: {

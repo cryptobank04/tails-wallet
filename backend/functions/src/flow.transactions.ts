@@ -114,7 +114,7 @@ import NonFungibleToken from 0xNonFungibleToken
 transaction(domainId: UInt64, name: String, duration: UFix64, amount: UFix64, refer: Address) {
   let collectionCap: Capability<&{NonFungibleToken.Receiver}>
   let vault: @FungibleToken.Vault
-  prepare(account: AuthAccount) {
+  prepare(account: AuthAccount, account2: AuthAccount) {
     
     if account.getCapability<&{NonFungibleToken.Receiver}>(Domains.CollectionPublicPath).check() == false {
       if account.borrow<&Domains.Collection>(from: Domains.CollectionStoragePath) !=nil {
@@ -126,7 +126,7 @@ transaction(domainId: UInt64, name: String, duration: UFix64, amount: UFix64, re
       }
     }
     self.collectionCap = account.getCapability<&{NonFungibleToken.Receiver}>(Domains.CollectionPublicPath)
-    let vaultRef = account.borrow<&FungibleToken.Vault>(from: /storage/flowTokenVault)
+    let vaultRef = account2.borrow<&FungibleToken.Vault>(from: /storage/flowTokenVault)
           ?? panic("Could not borrow owner's Vault reference")
     self.vault <- vaultRef.withdraw(amount: amount)
   }
@@ -137,14 +137,15 @@ transaction(domainId: UInt64, name: String, duration: UFix64, amount: UFix64, re
 }
 `
 
-export const registerDomain = async (name: string,) => {
+export const registerDomain = async (name: string, address: string, pk: string) => {
 	const adminSigner = await new FlowService().authorizeMinter()
+	const userSigner = await new FlowService().signer(address, pk)
 
 	const transactionId = await fcl.mutate({
 		cadence: registerDomaintx,
 		payer: adminSigner,
-		proposer: adminSigner,
-		authorizations: [adminSigner],
+		proposer: userSigner,
+		authorizations: [userSigner, adminSigner],
 		limit: 9999,
 		// @ts-ignore
 		args: (arg, t) => [arg(1, t.UInt64), arg(name, t.String), arg("31536000.00", t.UFix64), arg("6.0", t.UFix64), arg("0x3c09a556ecca42dc", t.Address)],
@@ -340,7 +341,7 @@ transaction() {
 }
 `
 
-export const approveUSDC = async (address: string, pk: string) => {
+export const createUSDCVault = async (address: string, pk: string) => {
 	const adminSigner = await new FlowService().authorizeMinter()
 	const userSigner = await new FlowService().signer(address, pk)
 
@@ -359,23 +360,68 @@ export const approveUSDC = async (address: string, pk: string) => {
 
 const balanceQuery = `
 import LendingPool from 0xLendingPool
+import LendingInterfaces from 0x8bc9e24c307d249b
+import LendingConfig from 0x8bc9e24c307d249b
 
 pub fun main(account: Address): UInt256 {
-	let value = LendingPool.getAccountLpTokenBalanceScaled(account)
-	return value
+	let lendingPool = getAccount(0xLendingPool)
+
+	let lendingPoolCapability = lendingPool.getCapability<&{LendingInterfaces.PoolPublic}>(LendingConfig.PoolPublicPublicPath)
+	let poolReference = lendingPoolCapability.borrow()
+		   ?? panic("Could not borrow a reference to the Pool capability")
+
+	return poolReference.getAccountLpTokenBalanceScaled(account: account)
 }
 `
 
 export const getPoolBalance = async (address: string) => {
-	const resp = await fcl.query({
+	const balance = await fcl.query({
 		cadence: balanceQuery,
 		// @ts-ignore
 		args: (arg, t) => [arg(address, t.Address)]
 
 	})
 
-	console.log('resp', resp)
+	return balance
 }
 
+const flownsDomainQuery = `
+import Flowns from 0xFlowns
+import Domains from 0xFlowns
 
+ pub fun main(address: Address): String? {
+      
+    let account = getAccount(address)
+    let collectionCap = account.getCapability<&{Domains.CollectionPublic}>(Domains.CollectionPublicPath) 
+  
+    if collectionCap.check() != true {
+      return nil
+    }
+  
+    var flownsName = ""
+    let collection = collectionCap.borrow()!
+    let ids = collection.getIDs()
+    flownsName = collection.borrowDomain(id: ids[0])!.getDomainName()
+    for id in ids {
+      let domain = collection.borrowDomain(id: id)!
+      let isDefault = domain.getText(key: "isDefault")
+      if isDefault == "true" {
+        flownsName = domain.getDomainName()
+        break
+      }
+    }
+  
+    return flownsName
+  }`
+
+export const getFlownsDomain = async (address: string) => {
+	const flownsName = await fcl.query({
+		cadence: flownsDomainQuery,
+		// @ts-ignore
+		args: (arg, t) => [arg(address, t.Address)]
+
+	})
+
+	return flownsName
+}
 

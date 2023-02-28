@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import PlaidLink, {
 	LinkSuccess,
 	LinkExit
@@ -8,10 +8,11 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import FA from 'react-native-vector-icons/FontAwesome'
 import { getPlaidLinkToken } from './api';
 
-import { useUser } from './hooks'
+import { useFlowAccount, useUser } from './hooks'
 
-const Dashboard = ({ navigation }: any ) => {
+const Dashboard = ({ navigation }: any) => {
 	const user = useUser()
+	const flowAccount = useFlowAccount()
 	const [linkToken, setLinkToken] = useState()
 	const [bankAccount, setBankAccount] = useState(undefined)
 
@@ -33,34 +34,36 @@ const Dashboard = ({ navigation }: any ) => {
 
 	return (
 		<View style={styles.background}>
-			<View style={{marginTop: 40}}>
-				<Text style={styles.networth}>Net Worth</Text>
-				<Text style={styles.balance}>$5,000</Text>
+			<View>
+				<Text style={styles.networth}>Balance</Text>
+				<Text style={styles.balance}>${flowAccount?.balance || 0} USDC</Text>
+				<View><Text>{flowAccount?.address}</Text></View>
+
 			</View>
 
 			<View style={styles.boxView}>
 				<TouchableOpacity style={styles.box} onPress={() => {
 					navigation.navigate('Transfer')
 				}} >
-				{/* <View style={styles.box}> */}
+					{/* <View style={styles.box}> */}
 					<Text style={styles.boxHeader}>Increment.Fi</Text>
 					<Text style={styles.boxSubheader}>Earn with Increment.Fi by investing into LP pools</Text>
-					<View style={{ alignItems: 'flex-end'}}>
-						<FA size={15} name='arrow-right'/>
+					<View style={{ alignItems: 'flex-end' }}>
+						<FA size={15} name='arrow-right' />
 
 					</View>
-				{/* </View> */}
-			</TouchableOpacity>
+					{/* </View> */}
+				</TouchableOpacity>
 
 				<TouchableOpacity style={styles.box} onPress={() => {
-					navigation.navigate('BankAccounts', {user: user})
+					navigation.navigate('BankAccounts', { user: user })
 				}} >
 					{/* <View style={styles.box}> */}
-						<Text style={styles.boxHeader}>Bank Accounts</Text>
-						<Text style={styles.boxSubheader}>Link or view a bank account</Text>
-						<View style={{ alignItems: 'flex-end'}}>
-							<FA size={15} name='arrow-right'/>
-						</View>
+					<Text style={styles.boxHeader}>Bank Accounts</Text>
+					<Text style={styles.boxSubheader}>Link or view a bank account</Text>
+					<View style={{ alignItems: 'flex-end' }}>
+						<FA size={15} name='arrow-right' />
+					</View>
 					{/* </View> */}
 				</TouchableOpacity>
 			</View>
@@ -70,10 +73,10 @@ const Dashboard = ({ navigation }: any ) => {
 
 const styles = StyleSheet.create({
 	background: {
-		flex: 1, 
-		backgroundColor: '#FAF9F6', 
-		paddingLeft: 20, 
-		paddingRight: 20, 
+		flex: 1,
+		backgroundColor: '#FAF9F6',
+		paddingLeft: 20,
+		paddingRight: 20,
 		// paddingTop: 30
 	},
 	networth: {
@@ -97,7 +100,7 @@ const styles = StyleSheet.create({
 		borderRadius: 14,
 		height: 180,
 		width: 180,
-		padding:20,
+		padding: 20,
 		justifyContent: 'space-between',
 		marginTop: 40
 	},

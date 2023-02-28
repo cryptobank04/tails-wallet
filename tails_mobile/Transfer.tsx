@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { View, TextInput, StyleSheet, Text, Image, KeyboardAvoidingView, TouchableOpacity, Modal } from 'react-native'
+import { View, TextInput, StyleSheet, Text, Image, KeyboardAvoidingView, TouchableOpacity, Modal, ActivityIndicator } from 'react-native'
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import { depositIntoPool, getAccount } from './api';
+import { useDispatch, useFlowAccount } from './hooks';
 
 const values = {
 	bank: {
@@ -20,9 +22,24 @@ interface Props {
 	destination?: string;
 }
 
-const Transfer = () => {
+const Transfer = ({ navigation }) => {
 	const [amount, setAmount] = useState(0)
 	const [showModal, setShowModal] = useState(false)
+	const [loading, setLoading] = useState(false)
+	const flowAccount = useFlowAccount()
+	const dispatch = useDispatch()
+
+	const submit = async () => {
+		setLoading(true)
+
+		if (flowAccount) {
+			await depositIntoPool(amount.toString(), flowAccount?.address, flowAccount?.privateKey)
+			await getAccount(flowAccount?.address, dispatch)
+
+			navigation.navigate('Dashboard')
+		}
+		setLoading(false)
+	}
 
 	return (
 		<View style={styles.container}>
@@ -33,12 +50,16 @@ const Transfer = () => {
 					<View style={{ flexDirection: 'row' }}>
 						<Image style={styles.image} source={values.bank.imageSource} />
 						<View style={{ marginLeft: 15 }}>
-							<Text style={styles.name}>Bank Name</Text>
-							<Text>Subtext</Text>
+							<Text style={styles.name}>TD Bank Checking - 0000</Text>
+							<Text>Balance: $100</Text>
 						</View>
 					</View>
-					<FeatherIcon size={28} name='chevron-right' />
+					{/* <FeatherIcon size={28} name='chevron-right' /> */}
 				</View>
+			</View>
+
+			<View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+				<FeatherIcon size={20} name='arrow-down' />
 			</View>
 
 			<View style={{ width: '100%', paddingLeft: 20, paddingRight: 15 }}>
@@ -47,11 +68,11 @@ const Transfer = () => {
 					<View style={{ flexDirection: 'row' }}>
 						<Image style={styles.image} source={values.increment.imageSource} />
 						<View style={{ marginLeft: 15 }}>
-							<Text style={styles.name}>Bank Name</Text>
-							<Text>Subtext</Text>
+							<Text style={styles.name}>Increment Fi - USDC Pool</Text>
+							<Text>Balance: $0</Text>
 						</View>
 					</View>
-					<FeatherIcon size={28} name='chevron-right' />
+					{/* <FeatherIcon size={28} name='chevron-right' /> */}
 				</View>
 			</View>
 
@@ -61,7 +82,7 @@ const Transfer = () => {
 				</View>
 			</TouchableOpacity>
 
-			<Modal presentationStyle='overFullScreen' transparent visible={showModal} animationType='slide'>
+			<Modal presentationStyle='overFullScreen' transparent visible={showModal} animationType='fade'>
 				<View style={styles.transparency}>
 					<View style={styles.modal}>
 						<Text style={styles.modalTitle}>Confirm Details</Text>
@@ -75,7 +96,15 @@ const Transfer = () => {
 						<Text style={styles.modalSubtitleValue}>TD Bank</Text>
 
 						<Text style={styles.modalSubtitle}>To: </Text>
-						<Text style={styles.modalSubtitleValue}>Incriment Fi</Text>
+						<Text style={styles.modalSubtitleValue}>Incriment Fi - USDC Pool</Text>
+
+
+						<TouchableOpacity style={{ width: '100%', marginTop: 20 }} onPress={submit}>
+							<View style={styles.button}>
+								{loading ? <ActivityIndicator color='white' animating /> : <Text style={styles.buttonText}>Confirm</Text>}
+
+							</View>
+						</TouchableOpacity>
 					</View>
 				</View>
 			</Modal>
@@ -109,7 +138,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	name: {
-		fontSize: 18,
+		fontSize: 15,
 		fontWeight: '400',
 		marginBottom: 4
 	},
