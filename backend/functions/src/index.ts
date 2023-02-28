@@ -23,7 +23,8 @@ export const test = functions.https.onRequest(async (_, res) => {
 	// const resp = await registerDomain('somenamesss2222', )
 	// console.log('Resp', resp)
 	// res.send(data)
-	// await getPoolBalance("0x05644a149e8ac162")
+	await getPoolBalance("0x05644a149e8ac162")
+
 })
 
 
@@ -129,7 +130,7 @@ export const depositIntoPool = functions.https.onRequest(async (req, res) => {
 	await transferUSDC(`${depositAmount}.00`, address, pk)
 	const data = await depositIntoUSDC(`${depositAmount}.00`, address, pk)
 
-	res.send(data)
+	res.send({ data, success: true })
 })
 
 // getAccount - simply queries user's flow account along with Flowns domain

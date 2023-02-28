@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import PlaidLink, {
 	LinkSuccess,
 	LinkExit
@@ -7,12 +7,13 @@ import PlaidLink, {
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { getPlaidLinkToken } from './api';
 
-import { useUser } from './hooks'
+import { useFlowAccount, useUser } from './hooks'
 
 const Dashboard = () => {
 	const user = useUser()
 	const [linkToken, setLinkToken] = useState()
 	const [bankAccount, setBankAccount] = useState(undefined)
+	const flowAccount = useFlowAccount()
 
 
 	useEffect(() => {
@@ -36,8 +37,20 @@ const Dashboard = () => {
 	return (
 		<View style={{ flex: 1, backgroundColor: 'white', paddingLeft: 20, paddingRight: 20, paddingTop: 30 }}>
 			<View>
-				<Text style={styles.networth}>Net Worth</Text>
-				<Text style={styles.balance}>$5,000</Text>
+				<Text style={styles.networth}>Balance</Text>
+				<Text style={styles.balance}>$5,000 USDC</Text>
+				<View><Text>{flowAccount?.address}</Text></View>
+			</View>
+
+			<View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+				<View style={{ height: 100, width: '48%', }}>
+					<Text>Increment Fi</Text>
+					<Text>Deposit USDC and Earn 8% /year</Text>
+				</View>
+				<View>
+					<Text>Bank Account</Text>
+					<Text>Add A Bank Account to get started</Text>
+				</View>
 			</View>
 
 			<Text style={styles.subtitle}>Linked Bank Accounts</Text>

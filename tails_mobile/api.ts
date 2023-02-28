@@ -57,3 +57,10 @@ export const depositIntoPool = async (amount: string, address: string, pk: strin
 	console.log('response', respJson)
 }
 
+
+export const getAccount = async (address: string, dispatch: Dispatch) => {
+	const resp = await fetch(`${baseUrl}/getAccount?address=${address}`)
+	const accountData = await resp.json()
+
+	dispatch({ type: 'update_account_balance', balance: accountData.balance })
+}

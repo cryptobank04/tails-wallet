@@ -360,22 +360,29 @@ export const createUSDCVault = async (address: string, pk: string) => {
 
 const balanceQuery = `
 import LendingPool from 0xLendingPool
+import LendingInterfaces from 0x8bc9e24c307d249b
+import LendingConfig from 0x8bc9e24c307d249b
 
 pub fun main(account: Address): UInt256 {
-	let value = LendingPool.getAccountLpTokenBalanceScaled(account)
-	return value
+	let lendingPool = getAccount(0xLendingPool)
+
+	let lendingPoolCapability = lendingPool.getCapability<&{LendingInterfaces.PoolPublic}>(LendingConfig.PoolPublicPublicPath)
+	let poolReference = lendingPoolCapability.borrow()
+		   ?? panic("Could not borrow a reference to the Pool capability")
+
+	return poolReference.getAccountLpTokenBalanceScaled(account: account)
 }
 `
 
 export const getPoolBalance = async (address: string) => {
-	await fcl.query({
+	const balance = await fcl.query({
 		cadence: balanceQuery,
 		// @ts-ignore
 		args: (arg, t) => [arg(address, t.Address)]
 
 	})
 
-	return 5
+	return balance
 }
 
 const flownsDomainQuery = `

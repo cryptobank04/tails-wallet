@@ -6,6 +6,8 @@ interface FlowAccount {
 	address: string;
 	privateKey: string;
 	publicKey: string;
+	flownsName: string;
+	balance: string;
 }
 
 export interface AppState {
@@ -16,6 +18,7 @@ export interface AppState {
 type Action =
 	| { type: 'set_user'; user: {} }
 	| { type: 'set_flow_account'; flowAccount: FlowAccount }
+	| { type: 'update_account_balance'; balance: string }
 
 
 export type Dispatch = (action: Action) => void;
@@ -33,6 +36,7 @@ const reducer = (state: AppState, action: Action) => {
 	switch (action.type) {
 		case 'set_user': return { ...state, user: action.user }
 		case 'set_flow_account': return { ...state, flowAccount: action.flowAccount }
+		case 'update_account_balance': return { ...state, flowAccount: { ...state.flowAccount, balance: action.balance } }
 		default: return state
 	}
 }

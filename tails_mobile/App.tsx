@@ -10,6 +10,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import FeatherIcon from 'react-native-vector-icons/Feather'
 
 import LandingPage from './LandingPage';
 
@@ -66,16 +67,26 @@ function App(): JSX.Element {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
+          name='Dashboard'
           options={{
             headerRight: ProfileAvatar,
             title: '',
-            headerShadowVisible: false
+            headerShadowVisible: false,
+            tabBarIcon: (props) => {
+              return <FeatherIcon color={props.focused ? 'black' : 'grey'} name='home' size={25} />
+            }
           }}
-          name='Dashboard'
           component={Dashboard}
+
         />
         <Tab.Screen
           name='Move Money'
+          options={{
+            headerShown: false,
+            tabBarIcon: (props) => {
+              return <FeatherIcon color={props.focused ? 'black' : 'grey'} name='dollar-sign' size={25} />
+            }
+          }}
           component={TransferNavigator}
         />
       </Tab.Navigator>
