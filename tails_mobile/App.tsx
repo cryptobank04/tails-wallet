@@ -34,7 +34,11 @@ function App(): JSX.Element {
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name='LandingPage' component={LandingPage} />
+          <Stack.Screen 
+            name='LandingPage' 
+            component={LandingPage} 
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     )
