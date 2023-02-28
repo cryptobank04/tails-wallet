@@ -1,6 +1,5 @@
 import {
-	GoogleSignin, GoogleSigninButton,
-	statusCodes,
+	GoogleSignin,
 } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import { Dispatch } from './store';

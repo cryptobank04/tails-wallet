@@ -9,9 +9,9 @@ import { useDispatch } from './hooks';
 const LandingPage = () => {
 	const dispatch = useDispatch()
 
-	const createAccount = async () => {
+	const createAccount = async (flownsName: string) => {
 		await createTailsAccount(dispatch)
-		await createFlowAccount(dispatch)
+		// await createFlowAccount(flownsName, dispatch)
 	}
 
 

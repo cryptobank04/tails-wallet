@@ -17,21 +17,33 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 
 import { AppContext } from './store';
-import { useUser } from './hooks';
+import { useFlowAccount, useUser } from './hooks';
 import Dashboard from './Dashboard';
 import ProfileAvatar from './components/ProfileAvatar';
 import TransferList from './TransferList';
 import Transfer from './Transfer';
+import Flowns from './Flowns';
 
 
 function App(): JSX.Element {
-  const user = useUser(AppContext)
+  const user = useUser()
+  const flowAccount = useFlowAccount()
 
   if (!user) {
     return (
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name='LandingPage' component={LandingPage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+  }
+
+  if (!flowAccount) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name='Flowns' component={Flowns} />
         </Stack.Navigator>
       </NavigationContainer>
     )
