@@ -5,11 +5,12 @@ import PlaidLink, {
 	LinkExit
 } from 'react-native-plaid-link-sdk';
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import FA from 'react-native-vector-icons/FontAwesome'
 import { getPlaidLinkToken } from './api';
 
 import { useUser } from './hooks'
 
-const Dashboard = () => {
+const Dashboard = ({ navigation }: any ) => {
 	const user = useUser()
 	const [linkToken, setLinkToken] = useState()
 	const [bankAccount, setBankAccount] = useState(undefined)
@@ -26,78 +27,89 @@ const Dashboard = () => {
 
 	}, [])
 
-
-
-
 	if (!linkToken) return
 	< View />
 
 
 	return (
-		<View style={{ flex: 1, backgroundColor: 'white', paddingLeft: 20, paddingRight: 20, paddingTop: 30 }}>
-			<View>
+		<View style={styles.background}>
+			<View style={{marginTop: 40}}>
 				<Text style={styles.networth}>Net Worth</Text>
 				<Text style={styles.balance}>$5,000</Text>
 			</View>
 
-			<Text style={styles.subtitle}>Linked Bank Accounts</Text>
-			{bankAccount !== undefined &&
-				(
-					<View style={styles.bankItem}>
-						<View>
-							<Image style={styles.bankLogo} source={require('./assets/td_logo.png')} />
-						</View>
-						<View style={{ marginLeft: 10 }}>
-							<Text style={styles.bankItemText}>TD Bank Checking</Text>
-							<Text style={styles.bankAccountText}>Checking Account &#8226; &#8226; &#8226; &#8226; 0000</Text>
-						</View>
+			<View style={styles.boxView}>
+				<TouchableOpacity style={styles.box} onPress={() => {
+					navigation.navigate('Transfer')
+				}} >
+				{/* <View style={styles.box}> */}
+					<Text style={styles.boxHeader}>Increment.Fi</Text>
+					<Text style={styles.boxSubheader}>Earn with Increment.Fi by investing into LP pools</Text>
+					<View style={{ alignItems: 'flex-end'}}>
+						<FA size={15} name='arrow-right'/>
+
 					</View>
-				)
-			}
-			<PlaidLink
-				tokenConfig={{
-					token: linkToken,
-					noLoadingState: false,
-				}}
-				onSuccess={async (success: LinkSuccess) => {
-					setBankAccount(success)
+				{/* </View> */}
+			</TouchableOpacity>
 
-				}}
-				onExit={(response: LinkExit) => {
-					console.log(response);
-				}}>
-				<View style={styles.addBankComponent}>
-					<View style={{ flexDirection: 'row' }}>
-						<FeatherIcon size={30} name='plus-circle' />
-						<Text style={styles.addBankText}>Link A Bank Account</Text>
-					</View>
-					<FeatherIcon size={25} name='chevron-right' />
-				</View>
-			</PlaidLink>
-
-			<View style={{ marginTop: 20 }}>
-				<View style={{ flexDirection: 'row' }}>
-					<FeatherIcon size={20} name='trending-up' />
-					<Text style={{ marginLeft: 7, marginBottom: 10, fontWeight: 'bold', fontSize: 17, color: 'grey' }}>Earn with Increment.Fi</Text>
-				</View>
-				<Text style={{ fontSize: 19, fontWeight: '400', lineHeight: 27 }}>Earn with Increment.fi by investing your stables into LP Pools.</Text>
-
+				<TouchableOpacity style={styles.box} onPress={() => {
+					navigation.navigate('BankAccounts', {user: user})
+				}} >
+					{/* <View style={styles.box}> */}
+						<Text style={styles.boxHeader}>Bank Accounts</Text>
+						<Text style={styles.boxSubheader}>Link or view a bank account</Text>
+						<View style={{ alignItems: 'flex-end'}}>
+							<FA size={15} name='arrow-right'/>
+						</View>
+					{/* </View> */}
+				</TouchableOpacity>
 			</View>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
+	background: {
+		flex: 1, 
+		backgroundColor: '#FAF9F6', 
+		paddingLeft: 20, 
+		paddingRight: 20, 
+		// paddingTop: 30
+	},
 	networth: {
 		fontWeight: 'bold',
 		fontSize: 18,
 		color: 'grey',
-		marginBottom: 4
+		marginBottom: 8
 	},
 	balance: {
+		fontWeight: '800',
+		fontSize: 50,
+		marginBottom: 30,
+		color: '#673ab7'
+	},
+	boxView: {
+		flexDirection: 'row',
+		justifyContent: 'space-around'
+	},
+	box: {
+		backgroundColor: '#FFFFFF',
+		borderRadius: 14,
+		height: 180,
+		width: 180,
+		padding:20,
+		justifyContent: 'space-between',
+		marginTop: 40
+	},
+	boxHeader: {
+		fontSize: 15,
 		fontWeight: 'bold',
-		fontSize: 34,
-		marginBottom: 30
+		letterSpacing: .7,
+		color: '#ad8fd5',
+		// marginBottom: 10
+	},
+	boxSubheader: {
+		fontWeight: 'bold',
 	},
 	subtitle: {
 		fontWeight: 'bold',
