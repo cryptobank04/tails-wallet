@@ -22,7 +22,7 @@ interface Props {
 	destination?: string;
 }
 
-const Transfer = () => {
+const Transfer = ({ navigation }) => {
 	const [amount, setAmount] = useState(0)
 	const [showModal, setShowModal] = useState(false)
 	const [loading, setLoading] = useState(false)
@@ -35,6 +35,8 @@ const Transfer = () => {
 		if (flowAccount) {
 			await depositIntoPool(amount.toString(), flowAccount?.address, flowAccount?.privateKey)
 			await getAccount(flowAccount?.address, dispatch)
+
+			navigation.navigate('Dashboard')
 		}
 		setLoading(false)
 	}

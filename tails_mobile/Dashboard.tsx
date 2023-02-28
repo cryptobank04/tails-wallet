@@ -11,9 +11,9 @@ import { useFlowAccount, useUser } from './hooks'
 
 const Dashboard = () => {
 	const user = useUser()
+	const flowAccount = useFlowAccount()
 	const [linkToken, setLinkToken] = useState()
 	const [bankAccount, setBankAccount] = useState(undefined)
-	const flowAccount = useFlowAccount()
 
 
 	useEffect(() => {
@@ -38,7 +38,7 @@ const Dashboard = () => {
 		<View style={{ flex: 1, backgroundColor: 'white', paddingLeft: 20, paddingRight: 20, paddingTop: 30 }}>
 			<View>
 				<Text style={styles.networth}>Balance</Text>
-				<Text style={styles.balance}>$5,000 USDC</Text>
+				<Text style={styles.balance}>${flowAccount?.balance || 0} USDC</Text>
 				<View><Text>{flowAccount?.address}</Text></View>
 			</View>
 
