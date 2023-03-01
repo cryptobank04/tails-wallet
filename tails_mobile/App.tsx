@@ -19,6 +19,7 @@ import LandingPage from './LandingPage';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 
+
 import { AppContext } from './store';
 import { useFlowAccount, useUser } from './hooks';
 import Dashboard from './Dashboard';
@@ -35,6 +36,7 @@ import BankAccounts from './BankAccounts';
 function App(): JSX.Element {
   const user = useUser()
   const flowAccount = useFlowAccount()
+  console.log('flow!!!!!!', flowAccount)
 
   if (!user) {
     return (
@@ -103,8 +105,8 @@ function App(): JSX.Element {
       <Tab.Navigator
         screenOptions={{
           tabBarStyle: {
-            // borderTopColor: "#191919",
-            backgroundColor: "#FAF9F6"
+            borderTopColor: "#191919",
+            backgroundColor: "#191919"
           },
           tabBarShowLabel: false,
           tabBarInactiveTintColor: "#c8c8c8",
@@ -116,10 +118,15 @@ function App(): JSX.Element {
           component={Dashboard}
           options={{
             headerRight: ProfileAvatar,
-            title: 'Earn Account',
+            title: `${flowAccount.flownsName}.fn`,
             headerShadowVisible: false,
+            headerTintColor: '#c8c8c8',
             headerStyle: {
-              backgroundColor: "#FAF9F6",
+              backgroundColor: "#1b1c1c",
+            },
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              letterSpacing: 1
             },
             tabBarIcon: ({ color }) => (
               <FA name="usd" color={color} size={25} />
@@ -130,6 +137,15 @@ function App(): JSX.Element {
           name='Move Money'
           component={TransferList}
           options={{
+            headerShadowVisible: false,
+            headerTintColor: '#ffffff',
+            headerStyle: {
+              backgroundColor: "#1b1c1c",
+            },
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              letterSpacing: 1
+            },
             // headerShown: false,
             tabBarIcon: ({ color }) => (
               <FA name="exchange" color={color} size={25} />
@@ -164,14 +180,17 @@ function App(): JSX.Element {
             component={Transfer}
             options={({ navigation }) => {
               return {
+                headerStyle: {
+                  backgroundColor: "#1b1c1c",
+                },
                 title: 'Transfer',
                 headerTitleStyle: {
-                  // color: "#FFFFFF"
+                  color: "#FFFFFF"
                 },
                 headerLeft: () => {
                   return (
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                      <MA name="window-close" size={20} />
+                      <MA name="window-close" size={20} color='#ffffff'/>
                     </TouchableOpacity>
                   )
                 },
@@ -185,6 +204,10 @@ function App(): JSX.Element {
             component={BankAccounts}
             options={{
               title: 'Bank Accounts',
+              headerTintColor: '#ffffff',
+              headerStyle: {
+                backgroundColor: "#1b1c1c",
+              },
             }}
           />
         </Stack.Group>

@@ -10,7 +10,7 @@ const ProfileAvatar = () => {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.text}>{flowAccount.flownsName}</Text>
+			{/* <Text style={styles.text}>{flowAccount.flownsName}</Text> */}
 
 			<View style={styles.avatarcontainer}>
 				<Image resizeMode='contain' source={{ uri: user.additionalUserInfo.profile.picture }} style={styles.image} />

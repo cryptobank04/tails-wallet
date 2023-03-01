@@ -36,8 +36,8 @@ const Dashboard = ({ navigation }: any) => {
 		<View style={styles.background}>
 			<View>
 				<Text style={styles.networth}>Balance</Text>
-				<Text style={styles.balance}>${flowAccount?.balance || 0} USDC</Text>
-				<View><Text>{flowAccount?.address}</Text></View>
+				<Text style={styles.balance}>{flowAccount?.balance || 0} USDC</Text>
+				{/* <View><Text>{flowAccount?.address}</Text></View> */}
 
 			</View>
 
@@ -74,7 +74,7 @@ const Dashboard = ({ navigation }: any) => {
 const styles = StyleSheet.create({
 	background: {
 		flex: 1,
-		backgroundColor: '#FAF9F6',
+		backgroundColor: '#1b1c1c',
 		paddingLeft: 20,
 		paddingRight: 20,
 		// paddingTop: 30
@@ -83,21 +83,22 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		fontSize: 18,
 		color: 'grey',
+		marginTop: 30,
 		marginBottom: 8
 	},
 	balance: {
 		fontWeight: '800',
 		fontSize: 50,
 		marginBottom: 30,
-		color: '#673ab7'
+		color: '#ffffff'
 	},
 	boxView: {
 		flexDirection: 'row',
 		justifyContent: 'space-around'
 	},
 	box: {
-		backgroundColor: '#FFFFFF',
-		borderRadius: 14,
+		backgroundColor: '#ad8fd5',
+		borderRadius: 18,
 		height: 180,
 		width: 180,
 		padding: 20,
@@ -108,11 +109,12 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 		fontWeight: 'bold',
 		letterSpacing: .7,
-		color: '#ad8fd5',
+		color: '#ffffff',
 		// marginBottom: 10
 	},
 	boxSubheader: {
 		fontWeight: 'bold',
+		lineHeight: 18
 	},
 	subtitle: {
 		fontWeight: 'bold',
