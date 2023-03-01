@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import MA from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const bankimageUri = 'https://cdn-icons-png.flaticon.com/512/8912/8912559.png'
 
@@ -8,21 +9,22 @@ const TransferList = ({ navigation }) => {
 
 
 
-	return (<View style={{ flex: 1, padding: 20 }}>
-		<TouchableOpacity onPress={() => {
+	return (
+		<View style={styles.background}>
+		{/* <TouchableOpacity onPress={() => {
 			navigation.navigate('Transfer')
 		}}>
 			<View style={styles.item}>
 				<View style={{ flexDirection: 'row' }}>
-					<Image source={{ uri: bankimageUri }} style={{ width: 23, height: 23 }} />
+					<MA name='bank' size={25} color='#673ab7'/>
 					<Text style={styles.itemText}>Fund your Tails Wallet</Text>
 				</View>
-				<FeatherIcon size={25} name='chevron-right' />
+				<FeatherIcon size={25} name='chevron-right' color='#ffffff' />
 
 			</View>
-		</TouchableOpacity>
+		</TouchableOpacity> */}
 
-		<Text style={styles.subtitle}>Earn w/ Increment.fi</Text>
+		<Text style={styles.subtitle}>Earn with Increment.fi</Text>
 		<TouchableOpacity>
 			<View style={styles.item}>
 				<View style={{ flexDirection: 'row' }}>
@@ -30,7 +32,7 @@ const TransferList = ({ navigation }) => {
 					<Text style={styles.itemText}>Deposit into Increment.fi </Text>
 
 				</View>
-				<FeatherIcon size={25} name='chevron-right' />
+				<FeatherIcon size={25} name='chevron-right' color='#ffffff'/>
 
 			</View>
 		</TouchableOpacity>
@@ -40,17 +42,17 @@ const TransferList = ({ navigation }) => {
 					<Image source={require('./assets/increment_logo.png')} style={{ width: 23, height: 23 }} />
 					<Text style={styles.itemText}>Withdraw from Increment.fi</Text>
 				</View>
-				<FeatherIcon size={25} name='chevron-right' />
+				<FeatherIcon size={25} name='chevron-right' color='#ffffff'/>
 			</View>
 		</TouchableOpacity>
 
 		<TouchableOpacity>
 			<View style={styles.item}>
 				<View style={{ flexDirection: 'row' }}>
-					<FeatherIcon name='refresh-ccw' size={23} />
+					<FeatherIcon name='refresh-ccw' size={23} color='#673ab7'/>
 					<Text style={styles.itemText}>Swap Tokens</Text>
 				</View>
-				<FeatherIcon size={25} name='chevron-right' />
+				<FeatherIcon size={25} name='chevron-right' color='#ffffff' />
 			</View>
 		</TouchableOpacity>
 
@@ -59,6 +61,11 @@ const TransferList = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+	background: {
+		flex: 1, 
+		padding: 20,
+		backgroundColor: '#1b1c1c'
+	},
 	item: {
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -69,13 +76,18 @@ const styles = StyleSheet.create({
 	},
 	itemText: {
 		fontSize: 18,
-		fontWeight: '400',
-		marginLeft: 20
+		fontWeight: '700',
+		marginLeft: 20,
+		color: '#ffffff',
+		letterSpacing: .5
 	},
 	subtitle: {
-		fontWeight: 'bold',
+		fontWeight: '700',
 		fontSize: 20,
-		marginBottom: 20
+		marginTop: 20,
+		marginBottom: 20,
+		color: '#ad8fd5',
+		letterSpacing: .4
 	},
 })
 

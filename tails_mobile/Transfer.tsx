@@ -56,7 +56,7 @@ const Transfer = ({ navigation }) => {
 						<Image style={styles.image} source={values.bank.imageSource} />
 						<View style={{ marginLeft: 15 }}>
 							<Text style={styles.name}>TD Bank Checking - 0000</Text>
-							<Text>Balance: $100</Text>
+							<Text style={{color: '#ffffff'}}>Balance: $100</Text>
 						</View>
 					</View>
 					{/* <FeatherIcon size={28} name='chevron-right' /> */}
@@ -64,7 +64,7 @@ const Transfer = ({ navigation }) => {
 			</View>
 
 			<View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-				<FeatherIcon size={20} name='arrow-down' />
+				<FeatherIcon size={20} name='arrow-down' color='#ffffff'/>
 			</View>
 
 			<View style={{ width: '100%', paddingLeft: 20, paddingRight: 15 }}>
@@ -74,7 +74,7 @@ const Transfer = ({ navigation }) => {
 						<Image style={styles.image} source={values.increment.imageSource} />
 						<View style={{ marginLeft: 15 }}>
 							<Text style={styles.name}>Increment Fi - USDC Pool</Text>
-							<Text>Balance: $0</Text>
+							<Text style={{color: '#ffffff'}}>Balance: $0</Text>
 						</View>
 					</View>
 					{/* <FeatherIcon size={28} name='chevron-right' /> */}
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
 		padding: 20,
 		paddingTop: 0,
 		alignItems: 'center',
-		backgroundColor: 'white'
+		backgroundColor: '#1b1c1c'
 	},
 	transferItem: {
 		flexDirection: 'row',
@@ -136,16 +136,19 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		width: 200,
 		height: 120,
-		marginTop: 0
+		marginTop: 0,
+		color: '#ffffff'
 
 	},
 	directionText: {
-		fontWeight: 'bold',
+		fontWeight: '700',
+		color: '#ffffff'
 	},
 	name: {
 		fontSize: 15,
-		fontWeight: '400',
-		marginBottom: 4
+		fontWeight: '700',
+		marginBottom: 4,
+		color: '#ffffff'
 	},
 	image: {
 		width: 35,
@@ -154,11 +157,11 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		width: '100%',
-		borderRadius: 20,
+		borderRadius: 25,
 		alignItems: 'center',
 		justifyContent: 'center',
 		height: 60,
-		backgroundColor: 'black'
+		backgroundColor: '#673ab7'
 	},
 	buttonText: {
 		color: 'white',
@@ -177,7 +180,8 @@ const styles = StyleSheet.create({
 	modalAmount: {
 		fontSize: 55,
 		fontWeight: 'bold',
-		marginBottom: 20
+		marginBottom: 20,
+		// color: '#ffffff'
 	},
 	transparency: {
 		backgroundColor: 'rgba(0,0,0,0.6)',

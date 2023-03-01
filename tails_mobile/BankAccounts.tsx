@@ -64,10 +64,10 @@ const BankAccounts = () => {
 				}}>
 				<View style={styles.addBankComponent}>
 					<View style={{ flexDirection: 'row' }}>
-						<FeatherIcon size={23} name='plus-circle' />
+						<FeatherIcon size={23} name='plus-circle' color='#c8c8c8'/>
 						<Text style={styles.addBankText}>Link A Bank Account</Text>
 					</View>
-					<FeatherIcon size={23} name='chevron-right' />
+					<FeatherIcon size={23} name='chevron-right' color='#c8c8c8' />
 				</View>
 			</PlaidLink>
 
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 	background: {
 		display: 'flex',
 		flex: 1, 
-		backgroundColor: '#ffffff', 
+		backgroundColor: '#1b1c1c', 
 		// paddingTop: 20,
 		// paddingTop: 30
 	},
@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		marginBottom: 16,
 		marginTop: 20,
-		marginLeft: 20
+		marginLeft: 20,
+		color: '#ffffff'
 	},
 	addBankComponent: {
 		flexDirection: 'row',
@@ -135,16 +136,19 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: '400',
 		marginLeft: 12,
-		alignSelf: 'center'
+		alignSelf: 'center',
+		color: '#c8c8c8'
 	},
 	bankItemText: {
 		fontSize: 17,
 		fontWeight: '400',
 		marginBottom: 4,
+		color: '#ffffff'
 	},
 	bankAccountText: {
 		fontSize: 13,
 		fontWeight: '400',
+		color:'#ffffff'
 	},
 	bankItem: {
 		flexDirection: 'row',
