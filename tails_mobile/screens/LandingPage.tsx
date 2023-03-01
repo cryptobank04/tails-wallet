@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-	StyleSheet, 
-	Image, 
-	TouchableOpacity, 
-	View, 
-	Text, 
-	SafeAreaView 
+import {
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	View,
+	Text,
+	SafeAreaView
 } from 'react-native'
 import { createFlowAccount, createTailsAccount } from '../api';
 import { useDispatch } from '../hooks';
@@ -24,9 +24,9 @@ const LandingPage = () => {
 				<Text style={styles.headerText}>Tails Wallet</Text>
 			</View>
 
-			<View style={{alignItems: 'center'}}>
-				<Image style={styles.image} resizeMode='contain' source={require('./assets/increment_logo.png')}/>
-				<View style={{marginTop: 25}}>
+			<View style={{ alignItems: 'center' }}>
+				<Image style={styles.image} resizeMode='contain' source={require('../assets/increment_logo.png')} />
+				<View style={{ marginTop: 25 }}>
 					<Text style={styles.subText}>EARN MORE WITH DeFi</Text>
 				</View>
 			</View>
@@ -45,8 +45,8 @@ const LandingPage = () => {
 
 const styles = StyleSheet.create({
 	background: {
-		flex: 1, 
-		alignItems: 'center', 
+		flex: 1,
+		alignItems: 'center',
 		justifyContent: 'space-around',
 		backgroundColor: 'FFFFFF'
 	},

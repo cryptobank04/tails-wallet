@@ -62,7 +62,7 @@ export const getAccount = async (address: string, dispatch: Dispatch) => {
 	const resp = await fetch(`${baseUrl}/getAccount?address=${address}`)
 	const accountData = await resp.json()
 
-	let poolBalance = Math.ceil(Number(String(accountData.poolBalance).slice(0, 1)))
+	let poolBalance = Math.ceil(Number(String(accountData.poolBalance).slice(0, 2)))
 
-	dispatch({ type: 'update_account_balance', balance: poolBalance.toString() })
+	dispatch({ type: 'update_account_balance', balance: poolBalance.toString().slice(0, 1) })
 }
