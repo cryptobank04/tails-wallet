@@ -65,7 +65,7 @@ export const createAccount = functions.https.onRequest(async (req, response) => 
 
 
 
-		console.log('ADDRESS', address)
+		console.log('ADDRESS ✅✅✅', address)
 
 
 		response.send({

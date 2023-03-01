@@ -20,14 +20,15 @@ const LandingPage = () => {
 
 	return (
 		<SafeAreaView style={styles.background}>
-			<View>
-				<Text style={styles.headerText}>Tails</Text>
-			</View>
 
-			<View style={{alignItems: 'center'}}>
-				<Image style={styles.image} resizeMode='contain' source={require('../assets/increment_logo.png')}/>
-				<View style={{marginTop: 25}}>
-					<Text style={styles.subText}>EARN MORE WITH DeFi</Text>
+
+			<View style={{ alignItems: 'center' }}>
+				<View>
+					<Image style={{ width: 350, height: 350, resizeMode: 'contain' }} source={require('../assets/tails_logo.png')} />
+				</View>
+				{/* <Image style={styles.image} resizeMode='contain' source={require('../assets/increment_logo.png')} /> */}
+				<View style={{ marginTop: -105 }}>
+					<Text style={{ ...styles.subText, fontSize: 15 }}>Defi Investing. For everyone.</Text>
 				</View>
 			</View>
 
@@ -48,13 +49,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		backgroundColor: '#1b1c1c'
+		backgroundColor: '#202124'
 	},
 	headerText: {
 		fontWeight: 'bold',
-		fontSize: 35,
+		fontSize: 60,
 		letterSpacing: 1,
-		color: '#ffffff'
+		color: 'white'
 	},
 	image: {
 		height: 150,

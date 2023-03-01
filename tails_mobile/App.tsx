@@ -8,6 +8,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native'
 
+console.disableYellowBox = true;
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -58,16 +59,16 @@ function App(): JSX.Element {
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen 
-          name='Flowns' 
-          component={Flowns} 
-          options={{
-            title: 'Flowns',
-            headerTintColor: '#ffffff',
-            headerStyle: {
-              backgroundColor: "#1b1c1c",
-            },
-          }}
+          <Stack.Screen
+            name='Flowns'
+            component={Flowns}
+            options={{
+              title: 'Flowns',
+              headerTintColor: '#ffffff',
+              headerStyle: {
+                backgroundColor: "#1b1c1c",
+              },
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

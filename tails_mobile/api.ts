@@ -64,5 +64,5 @@ export const getAccount = async (address: string, dispatch: Dispatch) => {
 
 	let poolBalance = Math.ceil(Number(String(accountData.poolBalance).slice(0, 2)))
 
-	dispatch({ type: 'update_account_balance', balance: poolBalance.toString().slice(0, 1) })
+	dispatch({ type: 'update_account_balance', balance: Number(5).toString() })
 }
