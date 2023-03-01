@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react'
-import { 
-  View, 
-  SafeAreaView,
-  Text, 
-  TouchableOpacity, 
-  StyleSheet, 
-  Image 
+import React, { useEffect, useState } from 'react'
+import {
+	View,
+	SafeAreaView,
+	Text,
+	TouchableOpacity,
+	StyleSheet,
+	Image
 } from 'react-native'
 
 import { getPlaidLinkToken } from '../api';
@@ -21,10 +21,10 @@ import { useUser } from '../hooks'
 
 const BankAccounts = () => {
 	const user = useUser()
-  const [linkToken, setLinkToken] = useState()
-  const [bankAccount, setBankAccount] = useState(undefined)
+	const [linkToken, setLinkToken] = useState()
+	const [bankAccount, setBankAccount] = useState(undefined)
 
-  useEffect(() => {
+	useEffect(() => {
 		const fetchLinkToken = async () => {
 			const linkTokenData = await getPlaidLinkToken(user.user.id)
 			setLinkToken(linkTokenData.linkToken.link_token)
@@ -32,9 +32,9 @@ const BankAccounts = () => {
 		fetchLinkToken()
 	}, [])
 
-  return (
-    <SafeAreaView style={styles.background}>
-      <Text style={styles.subtitle}>Linked Bank Accounts</Text>
+	return (
+		<SafeAreaView style={styles.background}>
+			<Text style={styles.subtitle}>Linked Bank Accounts</Text>
 
 			{bankAccount !== undefined &&
 				(
@@ -57,29 +57,29 @@ const BankAccounts = () => {
 				}}
 				onSuccess={async (success: LinkSuccess) => {
 					setBankAccount(success)
-					
+
 				}}
 				onExit={(response: LinkExit) => {
 					console.log(response);
 				}}>
 				<View style={styles.addBankComponent}>
 					<View style={{ flexDirection: 'row' }}>
-						<FeatherIcon size={23} name='plus-circle' color='#c8c8c8'/>
+						<FeatherIcon size={23} name='plus-circle' color='#c8c8c8' />
 						<Text style={styles.addBankText}>Link A Bank Account</Text>
 					</View>
 					<FeatherIcon size={23} name='chevron-right' color='#c8c8c8' />
 				</View>
 			</PlaidLink>
 
-    </SafeAreaView>
-  )
+		</SafeAreaView>
+	)
 }
 
 const styles = StyleSheet.create({
 	background: {
 		display: 'flex',
-		flex: 1, 
-		backgroundColor: '#1b1c1c', 
+		flex: 1,
+		backgroundColor: '#1b1c1c',
 		// paddingTop: 20,
 		// paddingTop: 30
 	},
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		height: 180,
 		width: 180,
-		padding:20,
+		padding: 20,
 		justifyContent: 'space-between'
 	},
 	boxHeader: {
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
 	bankAccountText: {
 		fontSize: 13,
 		fontWeight: '400',
-		color:'#ffffff'
+		color: '#ffffff'
 	},
 	bankItem: {
 		flexDirection: 'row',

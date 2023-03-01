@@ -20,8 +20,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 
 
-import { AppContext } from './store';
-import { useFlowAccount, useUser } from './hooks';
+import { useDispatch, useFlowAccount, useShowModal, useUser } from './hooks';
 import Dashboard from './screens/Dashboard';
 import ProfileAvatar from './components/ProfileAvatar';
 import TransferList from './screens/TransferList';
@@ -36,6 +35,9 @@ import BankAccounts from './screens/BankAccounts';
 function App(): JSX.Element {
   const user = useUser()
   const flowAccount = useFlowAccount()
+  const showModal = useShowModal()
+  const dispatch = useDispatch()
+
   console.log('flow!!!!!!', flowAccount)
 
   if (!user) {
@@ -130,11 +132,11 @@ function App(): JSX.Element {
             headerRight: ProfileAvatar,
             headerLeft: () => {
               return (
-                <TouchableOpacity >
-                  <MA style={{marginLeft: 20}} name='qrcode' color='#ffffff' size={28}/>
+                <TouchableOpacity onPress={() => dispatch({ type: 'set_show_modal', showModal: !showModal })}>
+                  <MA style={{ marginLeft: 20 }} name='qrcode' color='#ffffff' size={28} />
                 </TouchableOpacity>
               )
-              },
+            },
             title: `${flowAccount.flownsName}.fn`,
             headerShadowVisible: false,
             headerTintColor: '#c8c8c8',
@@ -190,7 +192,7 @@ function App(): JSX.Element {
             component={TransferList} 
           />
         </Stack.Group> */}
-        
+
         <Stack.Group
           screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen
@@ -208,7 +210,7 @@ function App(): JSX.Element {
                 headerLeft: () => {
                   return (
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                      <MA name="window-close" size={20} color='#ffffff'/>
+                      <MA name="window-close" size={20} color='#ffffff' />
                     </TouchableOpacity>
                   )
                 },

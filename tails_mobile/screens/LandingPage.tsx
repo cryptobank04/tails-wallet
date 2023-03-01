@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-	StyleSheet, 
-	Image, 
-	TouchableOpacity, 
-	View, 
-	Text, 
-	SafeAreaView 
+import {
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	View,
+	Text,
+	SafeAreaView
 } from 'react-native'
 import { createFlowAccount, createTailsAccount } from '../api';
 import { useDispatch } from '../hooks';
@@ -45,8 +45,8 @@ const LandingPage = () => {
 
 const styles = StyleSheet.create({
 	background: {
-		flex: 1, 
-		alignItems: 'center', 
+		flex: 1,
+		alignItems: 'center',
 		justifyContent: 'space-around',
 		backgroundColor: '#1b1c1c'
 	},

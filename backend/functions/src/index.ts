@@ -141,6 +141,11 @@ export const getAccount = functions.https.onRequest(async (req, res) => {
 	// 2. get poolBalance
 	const poolBalance = await getPoolBalance(address)
 
+	console.log('getAccount data', {
+		poolBalance,
+		flownsName
+	})
+
 	res.send({
 		poolBalance,
 		flownsName

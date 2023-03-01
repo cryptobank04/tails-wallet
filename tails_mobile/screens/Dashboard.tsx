@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import PlaidLink, {
-	LinkSuccess,
-	LinkExit
-} from 'react-native-plaid-link-sdk';
-import FeatherIcon from 'react-native-vector-icons/Feather'
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native'
 import FA from 'react-native-vector-icons/FontAwesome'
 import { getPlaidLinkToken } from '../api';
+import QRCode from 'react-native-qrcode-svg';
 
-import { useFlowAccount, useUser } from '../hooks'
+import { useDispatch, useFlowAccount, useShowModal, useUser } from '../hooks'
 
 const Dashboard = ({ navigation }: any) => {
 	const user = useUser()
 	const flowAccount = useFlowAccount()
+	const showModal = useShowModal()
 	const [linkToken, setLinkToken] = useState()
-	const [bankAccount, setBankAccount] = useState(undefined)
+	const dispatch = useDispatch()
 
 
 	useEffect(() => {
@@ -67,6 +64,27 @@ const Dashboard = ({ navigation }: any) => {
 					{/* </View> */}
 				</TouchableOpacity>
 			</View>
+
+			<Modal presentationStyle='overFullScreen' transparent visible={showModal} animationType='fade'>
+				<View style={styles.transparency}>
+					<View style={styles.modal}>
+						<Text style={{ fontSize: 40, fontWeight: 'bold', marginBottom: 30 }}>Deposit Funds</Text>
+
+						<QRCode value={flowAccount?.address || ''} size={120} />
+						<Text style={{ marginTop: 30, fontSize: 25, fontWeight: '400' }}>{flowAccount?.address}</Text>
+						<View style={{ width: '80%', backgroundColor: 'grey', height: 1, borderRadius: 1, marginTop: 10 }} />
+						<Text style={{ marginTop: 10, fontSize: 25, fontWeight: '400' }}>{flowAccount?.flownsName}.fn</Text>
+
+						<Text style={{ fontSize: 20, fontStyle: 18, fontWeight: '400', marginTop: 50, textAlign: 'center' }}>Scan QR code to deposit funds, or use Flowns name.</Text>
+						<TouchableOpacity style={{ width: '100%', marginTop: 20 }} onPress={() => dispatch({ type: 'set_show_modal', showModal: !showModal })}>
+							<View style={styles.button}>
+								<Text style={styles.buttonText}>Close</Text>
+							</View>
+						</TouchableOpacity>
+					</View>
+				</View>
+			</Modal>
+
 		</View>
 	)
 }
@@ -86,6 +104,30 @@ const styles = StyleSheet.create({
 		marginTop: 30,
 		marginBottom: 8
 	},
+	button: {
+		width: '100%',
+		borderRadius: 25,
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: 60,
+		backgroundColor: '#673ab7'
+	},
+	buttonText: {
+		color: 'white',
+		fontWeight: 'bold',
+		fontSize: 18
+	},
+	modal: {
+		width: '100%',
+		borderTopRightRadius: 40,
+		borderTopLeftRadius: 40,
+		backgroundColor: 'white',
+		height: '65%',
+		paddingTop: 35,
+		padding: 25,
+		alignItems: 'center',
+		justifyContent: 'flex-start'
+	},
 	balance: {
 		fontWeight: '800',
 		fontSize: 50,
@@ -104,6 +146,13 @@ const styles = StyleSheet.create({
 		padding: 20,
 		justifyContent: 'space-between',
 		marginTop: 40
+	},
+	transparency: {
+		backgroundColor: 'rgba(0,0,0,0.6)',
+		width: '100%',
+		height: '100%',
+		justifyContent: 'flex-end'
+
 	},
 	boxHeader: {
 		fontSize: 15,

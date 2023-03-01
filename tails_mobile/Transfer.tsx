@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { View, TextInput, StyleSheet, Text, Image, KeyboardAvoidingView, TouchableOpacity, Modal, ActivityIndicator } from 'react-native'
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import { depositIntoPool, getAccount } from '../api';
-import { useDispatch, useFlowAccount } from '../hooks';
+import { depositIntoPool, getAccount } from './api';
+import { useDispatch, useFlowAccount } from './hooks';
 
 const values = {
 	bank: {
@@ -11,7 +11,7 @@ const values = {
 		balance: '$100'
 	},
 	increment: {
-		imageSource: require('../assets/increment_logo.png'),
+		imageSource: require('./assets/increment_logo.png'),
 		name: 'Increment Pool',
 	},
 	wallet: {},
