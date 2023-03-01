@@ -40,7 +40,7 @@ const BankAccounts = () => {
 				(
 					<View style={styles.bankItem}>
 						<View>
-							<Image style={styles.bankLogo} source={require('./assets/td_logo.png')} />
+							<Image style={styles.bankLogo} source={require('../assets/td_logo.png')} />
 						</View>
 						<View style={{ marginLeft: 10 }}>
 							<Text style={styles.bankItemText}>TD Bank Checking</Text>

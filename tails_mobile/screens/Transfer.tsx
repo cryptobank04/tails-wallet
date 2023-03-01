@@ -6,12 +6,12 @@ import { useDispatch, useFlowAccount } from '../hooks';
 
 const values = {
 	bank: {
-		imageSource: require('./assets/td_logo.png'),
+		imageSource: require('../assets/td_logo.png'),
 		name: 'TD Bank - 0000',
 		balance: '$100'
 	},
 	increment: {
-		imageSource: require('./assets/increment_logo.png'),
+		imageSource: require('../assets/increment_logo.png'),
 		name: 'Increment Pool',
 	},
 	wallet: {},
