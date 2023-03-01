@@ -8,7 +8,7 @@ import {
   Image 
 } from 'react-native'
 
-import { getPlaidLinkToken } from './api';
+import { getPlaidLinkToken } from '../api';
 
 import PlaidLink, {
 	LinkSuccess,
@@ -16,7 +16,7 @@ import PlaidLink, {
 } from 'react-native-plaid-link-sdk';
 
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import { useUser } from './hooks'
+import { useUser } from '../hooks'
 
 
 const BankAccounts = () => {

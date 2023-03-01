@@ -6,9 +6,9 @@ import PlaidLink, {
 } from 'react-native-plaid-link-sdk';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import FA from 'react-native-vector-icons/FontAwesome'
-import { getPlaidLinkToken } from './api';
+import { getPlaidLinkToken } from '../api';
 
-import { useFlowAccount, useUser } from './hooks'
+import { useFlowAccount, useUser } from '../hooks'
 
 const Dashboard = ({ navigation }: any) => {
 	const user = useUser()

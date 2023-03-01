@@ -14,7 +14,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FeatherIcon from 'react-native-vector-icons/Feather'
 
-import LandingPage from './LandingPage';
+import LandingPage from './screens/LandingPage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
@@ -22,15 +22,15 @@ const Tab = createBottomTabNavigator()
 
 import { AppContext } from './store';
 import { useFlowAccount, useUser } from './hooks';
-import Dashboard from './Dashboard';
+import Dashboard from './screens/Dashboard';
 import ProfileAvatar from './components/ProfileAvatar';
-import TransferList from './TransferList';
-import Transfer from './Transfer';
+import TransferList from './screens/TransferList';
+import Transfer from './screens/Transfer';
 import Flowns from './Flowns';
 
 import FA from 'react-native-vector-icons/FontAwesome'
 import MA from 'react-native-vector-icons/MaterialCommunityIcons'
-import BankAccounts from './BankAccounts';
+import BankAccounts from './screens/BankAccounts';
 
 
 function App(): JSX.Element {
@@ -118,6 +118,13 @@ function App(): JSX.Element {
           component={Dashboard}
           options={{
             headerRight: ProfileAvatar,
+            headerLeft: () => {
+              return (
+                <TouchableOpacity >
+                  <MA style={{marginLeft: 20}} name='qrcode' color='#ffffff' size={28}/>
+                </TouchableOpacity>
+              )
+              },
             title: `${flowAccount.flownsName}.fn`,
             headerShadowVisible: false,
             headerTintColor: '#c8c8c8',
@@ -173,6 +180,7 @@ function App(): JSX.Element {
             component={TransferList} 
           />
         </Stack.Group> */}
+        
         <Stack.Group
           screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen

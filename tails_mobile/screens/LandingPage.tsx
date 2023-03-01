@@ -7,8 +7,8 @@ import {
 	Text, 
 	SafeAreaView 
 } from 'react-native'
-import { createFlowAccount, createTailsAccount } from './api';
-import { useDispatch } from './hooks';
+import { createFlowAccount, createTailsAccount } from '../api';
+import { useDispatch } from '../hooks';
 
 const LandingPage = () => {
 	const dispatch = useDispatch()
