@@ -29,7 +29,7 @@ const Flowns = () => {
 			</View>
 			<View style={{ width: '80%', alignItems: 'center', justifyContent: 'center' }}>
 
-				<Text style={{ textAlign: 'center' }}>Create a unique username. This username can be used to send and receive tokens.</Text>
+				<Text style={{ textAlign: 'center', color: '#ffffff', fontWeight: 'bold', letterSpacing: .5, lineHeight:20 }}>Create a unique username. This username can be used to send and receive tokens.</Text>
 			</View>
 
 
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		backgroundColor: 'white',
+		backgroundColor: '#1b1c1c',
 		paddingTop: 30
 	},
 	textinput: {
@@ -54,16 +54,17 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		// width: 200,
 		height: 120,
-		marginTop: 0
+		marginTop: 0,
+		color: '#ffffff'
 
 	},
 	button: {
 		width: '70%',
-		borderRadius: 20,
+		borderRadius: 25,
 		alignItems: 'center',
 		justifyContent: 'center',
 		height: 60,
-		backgroundColor: 'black'
+		backgroundColor: '#673ab7'
 	},
 	buttonText: {
 		color: 'white',

@@ -21,12 +21,12 @@ const LandingPage = () => {
 	return (
 		<SafeAreaView style={styles.background}>
 			<View>
-				<Text style={styles.headerText}>Tails Wallet</Text>
+				<Text style={styles.headerText}>Tails</Text>
 			</View>
 
-			<View style={{ alignItems: 'center' }}>
-				<Image style={styles.image} resizeMode='contain' source={require('../assets/increment_logo.png')} />
-				<View style={{ marginTop: 25 }}>
+			<View style={{alignItems: 'center'}}>
+				<Image style={styles.image} resizeMode='contain' source={require('../assets/increment_logo.png')}/>
+				<View style={{marginTop: 25}}>
 					<Text style={styles.subText}>EARN MORE WITH DeFi</Text>
 				</View>
 			</View>
@@ -48,12 +48,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		backgroundColor: 'FFFFFF'
+		backgroundColor: '#1b1c1c'
 	},
 	headerText: {
 		fontWeight: 'bold',
 		fontSize: 35,
 		letterSpacing: 1,
+		color: '#ffffff'
 	},
 	image: {
 		height: 150,
@@ -62,7 +63,8 @@ const styles = StyleSheet.create({
 	subText: {
 		fontWeight: 'bold',
 		letterSpacing: 1,
-		fontSize: 20
+		fontSize: 20,
+		color: '#ffffff'
 	},
 	buttons: {
 		alignItems: 'center'
@@ -70,7 +72,8 @@ const styles = StyleSheet.create({
 	emailText: {
 		fontWeight: "800",
 		fontSize: 17,
-		letterSpacing: .5
+		letterSpacing: .5,
+		color: '#ffffff'
 	}
 })
 

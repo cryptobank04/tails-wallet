@@ -58,7 +58,17 @@ function App(): JSX.Element {
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name='Flowns' component={Flowns} />
+          <Stack.Screen 
+          name='Flowns' 
+          component={Flowns} 
+          options={{
+            title: 'Flowns',
+            headerTintColor: '#ffffff',
+            headerStyle: {
+              backgroundColor: "#1b1c1c",
+            },
+          }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     )
