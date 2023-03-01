@@ -30,15 +30,20 @@ const Transfer = ({ navigation }) => {
 	const dispatch = useDispatch()
 
 	const submit = async () => {
-		setLoading(true)
+		try {
+			setLoading(true)
 
-		if (flowAccount) {
-			await depositIntoPool(amount.toString(), flowAccount?.address, flowAccount?.privateKey)
-			await getAccount(flowAccount?.address, dispatch)
+			if (flowAccount) {
+				await depositIntoPool(amount.toString(), flowAccount?.address, flowAccount?.privateKey)
+				await getAccount(flowAccount?.address, dispatch)
 
-			navigation.navigate('Dashboard')
+				navigation.navigate('Dashboard')
+			}
+		} catch (err) {
+
+		} finally {
+			setLoading(false)
 		}
-		setLoading(false)
 	}
 
 	return (

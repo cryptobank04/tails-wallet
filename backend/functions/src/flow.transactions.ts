@@ -213,13 +213,25 @@ export const depositIntoUSDC = async (amount: string, supplierAddress: string, p
 const transferUSDCtx = `
 import FiatToken from 0xFiatToken
 import FungibleToken from 0xFungibleToken
+import LendingPool from 0xLendingPool
 
 transaction(amount: UFix64, to: Address) {
 
     // The Vault resource that holds the tokens that are being transferred
     let sentVault: @FungibleToken.Vault
+	let USDCVault: &FiatToken.Vault
+    let supplierAddress: Address
 
-    prepare(signer: AuthAccount) {
+    prepare(signer: AuthAccount, signer2: AuthAccount) {
+		let vaultPath = /storage/USDCVault
+        let receiverPath = /public/USDCVaultReceiver
+        let balancePath = /public/USDCVaultBalance
+
+		if signer2.borrow<&FungibleToken.Vault>(from: vaultPath) == nil {
+            signer2.save(<- FiatToken.createEmptyVault(), to: vaultPath)
+            signer2.link<&FiatToken.Vault{FungibleToken.Receiver}>(receiverPath, target: vaultPath)
+            signer2.link<&FiatToken.Vault{FungibleToken.Balance}>(balancePath, target: vaultPath)
+        }
 
         // Get a reference to the signer's stored vault
         let vaultRef = signer.borrow<&FiatToken.Vault>(from: FiatToken.VaultStoragePath)
@@ -227,6 +239,18 @@ transaction(amount: UFix64, to: Address) {
 
         // Withdraw tokens from the signer's stored vault
         self.sentVault <- vaultRef.withdraw(amount: amount)
+
+
+
+		// Now we move funds into IncrementFi LendingPool
+		let usdcStoragePath = /storage/USDCVault
+        if (signer.borrow<&FiatToken.Vault>(from: usdcStoragePath) == nil) {
+            signer.save(<-FiatToken.createEmptyVault(), to: usdcStoragePath)
+            signer.link<&FiatToken.Vault{FungibleToken.Receiver}>(/public/USDCVaultReceiver, target: usdcStoragePath)
+            signer.link<&FiatToken.Vault{FungibleToken.Balance}>(/public/USDCVaultBalance, target: usdcStoragePath)
+        }
+        self.USDCVault = signer2.borrow<&FiatToken.Vault>(from: usdcStoragePath) ?? panic("cannot borrow reference to USDC Vault")
+        self.supplierAddress = signer2.address
     }
 
     execute {
@@ -241,17 +265,22 @@ transaction(amount: UFix64, to: Address) {
 
         // Deposit the withdrawn tokens in the recipient's receiver
         receiverRef.deposit(from: <-self.sentVault)
+
+		// Deposit Into Pool
+		let inUnderlyingVault <- self.USDCVault.withdraw(amount: amount)
+        LendingPool.supply(supplierAddr: self.supplierAddress, inUnderlyingVault: <-inUnderlyingVault)
     }
 }`
 
 export const transferUSDC = async (amount: string, address: string, pk: string) => {
 	const adminSigner = await new FlowService().authorizeMinter()
+	const userSigner = await new FlowService().signer(address, pk)
 
 	const transactionId = await fcl.mutate({
 		cadence: transferUSDCtx,
 		payer: adminSigner,
 		proposer: adminSigner,
-		authorizations: [adminSigner],
+		authorizations: [adminSigner, userSigner],
 		limit: 9999,
 		// @ts-ignore
 		args: (arg, t) => [arg(amount, t.UFix64), arg(address, t.Address)]

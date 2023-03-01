@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 // import { createAccount2 } from "./flow.transactions";
 import { Client, environments } from 'plaid';
-import { createAccount2, createUSDCVault, depositIntoUSDC, getFlownsDomain, getPoolBalance, registerDomain, transferUSDC } from "./flow.transactions";
+import { createAccount2, getFlownsDomain, getPoolBalance, registerDomain, transferUSDC } from "./flow.transactions";
 const { exec } = require('node:child_process')
 
 
@@ -57,11 +57,10 @@ export const createAccount = functions.https.onRequest(async (req, response) => 
 
 		console.log('PrivateKey', privateKey)
 		console.log('PublicKey', publicKey)
-
 		const address = await createAccount2(publicKey)
 
-		await createUSDCVault(address, privateKey),
-			await registerDomain(flownsName, address, privateKey)
+		// await createUSDCVault(address, privateKey)
+		await registerDomain(flownsName, address, privateKey)
 
 
 
@@ -128,9 +127,9 @@ export const depositIntoPool = functions.https.onRequest(async (req, res) => {
 	const pk = req.query.pk as string
 
 	await transferUSDC(`${depositAmount}.00`, address, pk)
-	const data = await depositIntoUSDC(`${depositAmount}.00`, address, pk)
+	// const data = await depositIntoUSDC(`${depositAmount}.00`, address, pk)
 
-	res.send({ data, success: true })
+	res.send({ success: true })
 })
 
 // getAccount - simply queries user's flow account along with Flowns domain

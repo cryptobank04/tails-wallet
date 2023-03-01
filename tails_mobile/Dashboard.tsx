@@ -47,7 +47,7 @@ const Dashboard = ({ navigation }: any) => {
 				}} >
 					{/* <View style={styles.box}> */}
 					<Text style={styles.boxHeader}>Increment.Fi</Text>
-					<Text style={styles.boxSubheader}>Earn with Increment.Fi by investing into LP pools</Text>
+					<Text style={styles.boxSubheader}>Earn 8% APY with Increment.Fi Pools</Text>
 					<View style={{ alignItems: 'flex-end' }}>
 						<FA size={15} name='arrow-right' />
 
